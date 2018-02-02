@@ -69,8 +69,10 @@ public class Drivetrain {
 		
 		leftFrontDrive.configOpenloopRamp(0.1, 100);
 		rightFrontDrive.configOpenloopRamp(0.1, 100);
+		
 		leftFrontDrive.configClosedloopRamp(0.1, 100);
 		rightFrontDrive.configClosedloopRamp(0.1, 100);
+		
 		leftFrontDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 		rightFrontDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0);
 
@@ -194,9 +196,12 @@ public class Drivetrain {
 		
 		  /*the joystick value is multiplied by a target RPM so the 
 		  *robot works with the velocity tuning code*/
-	        leftFrontDrive.set(ControlMode.Velocity, -(leftSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
-			rightFrontDrive.set(ControlMode.Velocity, (rightSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
+	        //leftFrontDrive.set(ControlMode.Velocity, -(leftSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
+			//rightFrontDrive.set(ControlMode.Velocity, (rightSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
 			
+			leftFrontDrive.set(ControlMode.PercentOutput, leftSpeed); //-(leftSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
+            rightFrontDrive.set(ControlMode.PercentOutput, rightSpeed); //(rightSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
+            
 			
 			 //convert to inches/second
 			System.out.println("RIGHT SPEED IS =" + rightFrontDrive.getSelectedSensorVelocity(0)/28.0);

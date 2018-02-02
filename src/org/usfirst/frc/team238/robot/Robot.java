@@ -9,6 +9,7 @@ package org.usfirst.frc.team238.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -51,10 +52,13 @@ public class Robot extends IterativeRobot
 	private static int count = 1;
 	double[] dataFromVision;
 		
-	TalonSRX leftFrontDrive; 
-	TalonSRX leftRearDrive; 
-	TalonSRX rightFrontDrive; 
-	TalonSRX rightRearDrive; 
+	TalonSRX leftMasterDrive; 
+	VictorSPX leftDriveFollower1;
+	VictorSPX leftDriveFollower2;
+	
+	TalonSRX rightMasterDrive; 
+	VictorSPX rightDriveFollower1;
+	VictorSPX rightDriveFollower2;
 	
 	Robot myRobot;
 	Preferences myPreferences;
@@ -233,7 +237,7 @@ public class Robot extends IterativeRobot
 	@Override
 	public void autonomousPeriodic() 
 	{
-		//RM SmartDashboard.putNumber("Left Encoder", leftFrontDrive.getSelectedSensorPosition(0));
+		//RM SmartDashboard.putNumber("Left Encoder", leftMasterDrive.getSelectedSensorPosition(0));
 		//RM SmartDashboard.putNumber("Right Encoder", rightFrontDrive.getSelectedSensorPosition(0));
 		
 		try 
@@ -272,15 +276,15 @@ public class Robot extends IterativeRobot
 	public void teleopPeriodic() 
 	{
 		/*
-		leftFrontDrive.set(ControlMode.PercentOutput, -0.5); 
-		leftRearDrive.set(ControlMode.PercentOutput, -0.5);; 
-		rightFrontDrive.set(ControlMode.PercentOutput, -0.5);; 
-		rightRearDrive.set(ControlMode.PercentOutput, -0.5);; 
+		leftMasterDrive.set(ControlMode.PercentOutput, -0.5); 
+		leftDriveFollower1.set(ControlMode.PercentOutput, -0.5);; 
+		rightMasterDrive.set(ControlMode.PercentOutput, -0.5);; 
+		rightDriveFollower1.set(ControlMode.PercentOutput, -0.5);; 
 		*/
 		HashMap<Integer,Integer[]> commandValues;
 		
-		SmartDashboard.putNumber("Left Encoder", leftFrontDrive.getSelectedSensorPosition(0));
-		SmartDashboard.putNumber("Right Encoder", rightFrontDrive.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Left Encoder", leftMasterDrive.getSelectedSensorPosition(0));
+		SmartDashboard.putNumber("Right Encoder", rightMasterDrive.getSelectedSensorPosition(0));
 		
 		try 
 		{
@@ -315,18 +319,31 @@ public class Robot extends IterativeRobot
 	 */
 	public void initTalons()
 	{
-		leftFrontDrive = new TalonSRX(5);   //id =  
-		leftRearDrive = new TalonSRX(6);     //id =  
-		rightFrontDrive = new TalonSRX(8); //id =  
-		rightRearDrive = new TalonSRX(7);   //id =
+		leftMasterDrive = new TalonSRX(15);  
+		leftDriveFollower1 = new VictorSPX(14);  
+		leftDriveFollower2 = new VictorSPX(13);
 		
-		rightRearDrive.set(ControlMode.Follower, CrusaderCommon.DRIVE_TRAIN_MASTER_RIGHT);
-		leftRearDrive.set(ControlMode.Follower,CrusaderCommon.DRIVE_TRAIN_MASTER_LEFT);
+		leftDriveFollower1.follow(leftMasterDrive);  // .set(ControlMode.Follower,CrusaderCommon.DRIVE_TRAIN_LEFT_MASTER);
+        leftDriveFollower2.follow(leftMasterDrive); //set(ControlMode.Follower,CrusaderCommon.DRIVE_TRAIN_LEFT_MASTER);       
+       
+        leftMasterDrive.setNeutralMode(NeutralMode.Brake);
+        leftDriveFollower1.setNeutralMode(NeutralMode.Brake);
+        leftDriveFollower2.setNeutralMode(NeutralMode.Brake);
+        
+		rightMasterDrive = new TalonSRX(0);  
+		rightDriveFollower1 = new VictorSPX(1);
+		rightDriveFollower2 = new VictorSPX(2);		
 		
-		leftFrontDrive.setNeutralMode(NeutralMode.Brake);
-		rightFrontDrive.setNeutralMode(NeutralMode.Brake);
-		leftRearDrive.setNeutralMode(NeutralMode.Brake);
-		rightRearDrive.setNeutralMode(NeutralMode.Brake);
+		rightMasterDrive.setInverted(true);
+		rightDriveFollower1.setInverted(true);
+		rightDriveFollower2.setInverted(true);
+		
+		rightDriveFollower1.follow(rightMasterDrive); //set(ControlMode.Follower, CrusaderCommon.DRIVE_TRAIN_RIGHT_MASTER);
+		rightDriveFollower2.follow(rightMasterDrive); //set(ControlMode.Follower, CrusaderCommon.DRIVE_TRAIN_RIGHT_MASTER);
+		
+		rightMasterDrive.setNeutralMode(NeutralMode.Brake);
+		rightDriveFollower1.setNeutralMode(NeutralMode.Brake);
+        rightDriveFollower2.setNeutralMode(NeutralMode.Brake);
 		
 		Logger.Log("initTalons Is Sucessful!");
 	}
@@ -340,7 +357,7 @@ public class Robot extends IterativeRobot
 		myNavigation.init();
 		
 		myDriveTrain = new Drivetrain(myControlBoard);
-		myDriveTrain.init(leftFrontDrive, rightFrontDrive);
+		myDriveTrain.init(leftMasterDrive, rightMasterDrive);
 		
 		myControlBoard = new ControlBoard();
 		myControlBoard.controlBoardInit();
