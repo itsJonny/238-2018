@@ -88,12 +88,12 @@ public class CommandCurlForward extends AbstractCommand
         switch(direction){
           
           case "Left":
-            myRobotDrive.driveForward(turnValue, motorValue);
+            myRobotDrive.drive(turnValue, motorValue);
             Logger.Log("CommandCurlForward(): We Are Going Left","CommandCurlForwardLog");
             break;
          
           case "Right":
-            myRobotDrive.driveForward(motorValue, turnValue);
+            myRobotDrive.drive(motorValue, turnValue);
             Logger.Log("CommandCurlForward(): We Are Going Right","CommandCurlForwardLog");
             break;
             
@@ -254,7 +254,7 @@ public class CommandCurlForward extends AbstractCommand
         
         if(myNavigation.areWeThereYet())
         {
-          myRobotDrive.driveForward(0, 0);
+          myRobotDrive.drive(0, 0);
           //myFuelHandler.theIntake.IntakeStop();
           doness = true;
         }
@@ -277,11 +277,11 @@ public class CommandCurlForward extends AbstractCommand
           switch(direction){
             
             case "Left":
-              myRobotDrive.driveForward(0, 1);
+              myRobotDrive.drive(0, 1);
               break;
            
             case "Right":
-              myRobotDrive.driveForward(1, 0);
+              myRobotDrive.drive(1, 0);
               break;
               
             default:
@@ -293,7 +293,7 @@ public class CommandCurlForward extends AbstractCommand
         }
         else
         {
-          myRobotDrive.driveForward(0, 0);
+          myRobotDrive.drive(0, 0);
           doness = true;
         }
         
@@ -330,7 +330,7 @@ public class CommandCurlForward extends AbstractCommand
     finalMotorValueLeft = motorValue - yawCorrection;
     finalMotorValueRight = motorValue + yawCorrection;
     
-    myRobotDrive.driveForward(finalMotorValueLeft, finalMotorValueRight);
+    myRobotDrive.drive(finalMotorValueLeft, finalMotorValueRight);
     
     Logger.Log("CommandCurlForward(): LeftMotorValue = "+ finalMotorValueLeft); 
     Logger.Log("CommandCurlForward(): RightMotorValue = " + finalMotorValueRight);

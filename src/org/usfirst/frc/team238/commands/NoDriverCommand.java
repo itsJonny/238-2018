@@ -10,20 +10,17 @@ public class NoDriverCommand extends AbstractCommand {
 	
 	public void prepare(){
 		
-		
-		
 	}
 	
 	public NoDriverCommand(Drivetrain myRobotDrive){
 		
-		// TODO Auto-generated constructor stub
 		this.myRobotDrive = myRobotDrive;
 	}
 
 	
 	public void execute() {
 		myRobotDrive.nobtnPressed();
-		//myRobotDrive.shiftLow();
+		myRobotDrive.shiftLow();
 	}
 
 	

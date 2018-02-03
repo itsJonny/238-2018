@@ -177,36 +177,30 @@ public class Drivetrain {
 	
 	
 	
-	/*These four functions are used in autonomous to drive the robot*/
 	
 	/**
-	 * A drive forward function used in Autonomous
+	 * A drive function
 	 * @param leftMotorValue
 	 * @param rightMotorValue
 	 */
-	public void driveForward(double leftMotorValue, double rightMotorValue)  {
+	public void drive(double leftMotorValue, double rightMotorValue)  {
 		
 	  /*the joystick value is multiplied by a target RPM so the 
 	  *robot works with the velocity tuning code*/
 		leftFrontDrive.set(ControlMode.PercentOutput, leftMotorValue);
-		rightFrontDrive.set(ControlMode.PercentOutput, -rightMotorValue);
+		rightFrontDrive.set(ControlMode.PercentOutput, rightMotorValue);
 	}
 	
 	public void driveSpeed(double leftSpeed, double rightSpeed) {
 		
 		  /*the joystick value is multiplied by a target RPM so the 
 		  *robot works with the velocity tuning code*/
-	        //leftFrontDrive.set(ControlMode.Velocity, -(leftSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
-			//rightFrontDrive.set(ControlMode.Velocity, (rightSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
-			
-			leftFrontDrive.set(ControlMode.PercentOutput, leftSpeed); //-(leftSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
-            rightFrontDrive.set(ControlMode.PercentOutput, rightSpeed); //(rightSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
-            
+	        leftFrontDrive.set(ControlMode.Velocity, -(leftSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
+			rightFrontDrive.set(ControlMode.Velocity, (rightSpeed/10) * CrusaderCommon.DRIVE_FORWARD_ENCODER_TICKS_PER_INCH);
 			
 			 //convert to inches/second
-			System.out.println("RIGHT SPEED IS =" + rightFrontDrive.getSelectedSensorVelocity(0)/28.0);
-			
-			System.out.println("RIGHT ERROR IS =" + rightFrontDrive.getClosedLoopError(0));
+			Logger.Log("DriveTrain() : driveSpeed() : RIGHT SPEED IS =" + rightFrontDrive.getSelectedSensorVelocity(0)/28.0);
+			Logger.Log("DriveTrain() : driveSpeed() : RIGHT ERROR IS =" + rightFrontDrive.getClosedLoopError(0));
 
 		}
 	
@@ -220,7 +214,7 @@ public class Drivetrain {
 		
 		//robotMotors.tankDrive(leftMotorValue, rightMotorValue);
     leftFrontDrive.set(ControlMode.PercentOutput, -leftMotorValue);
-    rightFrontDrive.set(ControlMode.PercentOutput, rightMotorValue);
+    rightFrontDrive.set(ControlMode.PercentOutput, -rightMotorValue);
 	}
 	
 	
@@ -233,7 +227,7 @@ public class Drivetrain {
 		
 	  
     leftFrontDrive.set(ControlMode.PercentOutput, -leftJsValue);
-    rightFrontDrive.set(ControlMode.PercentOutput, -rightJsValue);
+    rightFrontDrive.set(ControlMode.PercentOutput, rightJsValue);
     
 	}
 	
@@ -247,7 +241,7 @@ public class Drivetrain {
 		
 	  
     leftFrontDrive.set(ControlMode.PercentOutput, leftJsValue);
-    rightFrontDrive.set(ControlMode.PercentOutput, rightJsValue);
+    rightFrontDrive.set(ControlMode.PercentOutput, -rightJsValue);
     
 	}
 	
@@ -271,10 +265,6 @@ public class Drivetrain {
     talon.config_kP(0, CrusaderCommon.TALON_P_VALUE, 0); //.8);//064543);
     talon.config_kI(0, CrusaderCommon.TALON_NO_VALUE, 0); 
     talon.config_kD(0, CrusaderCommon.TALON_D_VALUE, 0);
-    
-    //this set the talon to use speed mode instead of voltage mode
-    
-    
     
     talon.set(ControlMode.Velocity, 0);
     
@@ -454,42 +444,4 @@ public class Drivetrain {
 		//Logger.logDouble("Reset", lastBtnPressed);
 	}
 	
-	/*
-	 * public void incrementMotorValue()
-	{
-		Logger.logDouble("Increment", protoCounter);
-		
-		if(protoCounter < 1)
-		{
-			
-			if(delayCounter > 50)
-			{
-				robotMotors.tankDrive(protoCounter += .10, 0);
-				delayCounter =0;
-			}
-			delayCounter++;
-			Logger.logDouble("Increment", protoCounter);
-		}
-	}
-	
-	public void decrementMotorValue()
-	{
-		Logger.logDouble("decrement", protoCounter);
-		
-		if(protoCounter > -1)
-		{
-			if(delayCounter > 50)
-			{
-				protoCounter = protoCounter * 100;
-				protoCounter -= 10;
-				protoCounter = protoCounter/100;
-				robotMotors.tankDrive(protoCounter, 0);
-				delayCounter =0;
-			}
-			delayCounter++;
-			
-			Logger.logDouble("Decrement", protoCounter);
-		}
-	}
-	 */
 }

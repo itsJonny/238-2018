@@ -11,18 +11,15 @@ public class CommandDriveBackwards extends AbstractCommand {
 
   double motorValue;
   double targetValue;
-  // boolean debug;
 
   public CommandDriveBackwards(Drivetrain robotDrive) {
     this.myRobotDrive = robotDrive;
-    // this.debug = SmartDashboard.getBoolean("Debug");
 
   }
 
   public void prepare() {
 
     myRobotDrive.resetEncoders();
-    //Logger.Log("CommandDriveBackwards.prepare");
 
   }
 
@@ -60,7 +57,7 @@ public class CommandDriveBackwards extends AbstractCommand {
     if (amountOfTicks > targetValue) {
 
       isDone = true;
-      myRobotDrive.driveForward(0, 0);
+      myRobotDrive.drive(0, 0);
 
     } else {
       isDone = false;

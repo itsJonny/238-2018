@@ -29,28 +29,29 @@ public class CommandTurnRight extends AbstractCommand {
 
   public void prepare() {
 
-    myNavigation.resetNAVX();
     myNavigation.zeroYaw();
     resetVals();
 
   }
 
   public void execute() {
-
-   // finalMotorValue = myNavigation.turningMotorValue(targetValue, currentYaw, motorValue);
     
     double yaw = myNavigation.getYaw();
     double calculatedValue;
     
-    calculatedValue = pidCalc(CrusaderCommon.TURN_P_VALUE, CrusaderCommon.TURN_DEAD_STOP_RIGHT,
-        targetValue, CrusaderCommon.TURN_MAX_ERROR,CrusaderCommon.TURN_MAX_MOTOR_VALUE, CrusaderCommon.TURN_I_VALUE);
+    calculatedValue = pidCalc(  CrusaderCommon.TURN_P_VALUE, 
+                                CrusaderCommon.TURN_DEAD_STOP_RIGHT,
+                                targetValue,
+                                CrusaderCommon.TURN_MAX_ERROR,
+                                CrusaderCommon.TURN_MAX_MOTOR_VALUE,
+                                CrusaderCommon.TURN_I_VALUE);
     currentYaw = myNavigation.getYaw();
     myRobotDrive.turnRight(calculatedValue, calculatedValue);
-    Logger.Log("CALCULATED VALUE = " + calculatedValue);
     myNavigation.navxValues();
     
     Logger.Log("CommandTurnRight(): Our yaw = "+yaw);
     Logger.Log("CommandTurnRight(): Our Target yaw is = "+ targetValue);
+    Logger.Log("CALCULATED VALUE = " + calculatedValue);
     
   }
 
@@ -83,7 +84,7 @@ public class CommandTurnRight extends AbstractCommand {
   public boolean done() {
 
     if (myNavigation.areWeThereYet() == true) {
-      myRobotDrive.driveForward(0, 0);
+      myRobotDrive.drive(0, 0);
       return true;
     }
 
@@ -99,7 +100,7 @@ public class CommandTurnRight extends AbstractCommand {
     double currentYaw = Math.abs(myNavigation.getYaw());
     
     error = targetValue - currentYaw;
-    //Logger.Log("TURN ERROR = " + error);
+    Logger.Log("TURN ERROR = " + error);
     
     return error;
   }

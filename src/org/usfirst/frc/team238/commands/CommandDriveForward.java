@@ -50,14 +50,11 @@ public class CommandDriveForward extends AbstractCommand {
   public void prepare() {
 
     yawErrorTotal = 0;
-    
-    //myNavigation.resetNAVX();
     myNavigation.zeroYaw();
     myRobotDrive.resetEncoders();
     yawValue = myNavigation.getYaw();
     previousEncoderTicks = 0;
     delayCount = 0;
-    //RM SmartDashboard.putNumber("Starting Yaw", yawValue);
     
     //Logger.Log("CommandDriveForward.prepare");
 
@@ -91,15 +88,7 @@ public class CommandDriveForward extends AbstractCommand {
     Logger.Log("CommandDriveForward(): RightMotorValue = " + finalMotorValueRight);
     Logger.Log("CommandDriveForward(): CurrentYaw: "+ currentYaw+ "  YawError: "+ yawError+ "  YawCorrection: "+ yawCorrection);
     
-    //myRobotDrive.driveForward(finalMotorValueLeft, finalMotorValueRight);
-    
-    
-    
-    myRobotDrive.driveSpeed(finalMotorValueLeft, finalMotorValueRight);
-    
-    double averageSpeed = (finalMotorValueLeft + finalMotorValueRight) / 2;
-    
-    SmartDashboard.putNumber("Average Speed", averageSpeed);
+    myRobotDrive.drive(finalMotorValueLeft, finalMotorValueRight);
     
     /*
      * SmartDashboard.putNumber("YawError", yawError);
@@ -108,12 +97,12 @@ public class CommandDriveForward extends AbstractCommand {
      * SmartDashboard.putNumber("YawCorrection", yawCorrection);
      * SmartDashboard.putNumber("finalMotorValueLeft", finalMotorValueLeft);
      * SmartDashboard.putNumber("finalMotorValueRight", finalMotorValueRight);
+     * double averageSpeed = (finalMotorValueLeft + finalMotorValueRight) / 2;
+     * SmartDashboard.putNumber("Average Speed", averageSpeed);
+     * 
+     * myRobotDrive.driveSpeed(finalMotorValueLeft, finalMotorValueRight);
      */
 
-   
-    //myRobotDrive.driveForward(motorValue, motorValue);
-    
-    // myRobotDrive.driveForward(motorValue, motorValue);
 
   }
 
@@ -149,7 +138,7 @@ public class CommandDriveForward extends AbstractCommand {
   
     double amountOfTicks;
     
-    boolean areWeCollided;
+    //boolean areWeCollided;
     
     amountOfTicks = myRobotDrive.getEncoderTicks();
     
@@ -157,41 +146,10 @@ public class CommandDriveForward extends AbstractCommand {
     
     boolean areWeDone = (amountOfTicks > targetValue);
 
-    if((!areWeDone) && (stallValue != 0)) 
-    {
-      //if we run into a wall and still arent There yet consider it done 
-      
-      if(ultrasonicTarget > 0)
-      {
-        
-        if(timerInMillis() > ultrasonicTarget)
-          areWeDone = true;
-        
-      }
-      
-      if (amountOfTicks > okToCheckForCollision)
-      {
-        
-        areWeCollided = myNavigation.haveWeCollided();
-        
-        if(areWeCollided)
-        {
-          
-          //if(myNavigation.getCollisionDelay() > CrusaderCommon.COLLISION_DELAY_IN_MILLIS)
-          //{
-            areWeDone = true;
-          //}
-          
-        }
-      }
-
-         
-    }
 
     if (areWeDone) 
     {
-      //isDone = true;
-      myRobotDrive.driveForward(0, 0);
+      myRobotDrive.drive(0, 0);
       //RM SmartDashboard.putNumber("WE STOPPED AT", amountOfTicks);
     }
     
@@ -228,5 +186,56 @@ public class CommandDriveForward extends AbstractCommand {
     
     return delayElapsed;
   }
-  
+//  public boolean done() {
+//      
+//      double amountOfTicks;
+//      
+//      //boolean areWeCollided;
+//      
+//      amountOfTicks = myRobotDrive.getEncoderTicks();
+//      
+//      Logger.Log("CommandDriveForward() : Target Value = "+ targetValue+ " Amount Of Ticks = "+ amountOfTicks);
+//      
+//      boolean areWeDone = (amountOfTicks > targetValue);
+//
+//      if((!areWeDone) && (stallValue != 0)) 
+//      {
+//        //if we run into a wall and still arent There yet consider it done 
+//        
+//        if(ultrasonicTarget > 0)
+//        {
+//          
+//          if(timerInMillis() > ultrasonicTarget)
+//            areWeDone = true;
+//          
+//        }
+//        
+//        if (amountOfTicks > okToCheckForCollision)
+//        {
+//          
+//          areWeCollided = myNavigation.haveWeCollided();
+//          
+//          if(areWeCollided)
+//          {
+//            
+//            //if(myNavigation.getCollisionDelay() > CrusaderCommon.COLLISION_DELAY_IN_MILLIS)
+//            //{
+//              areWeDone = true;
+//            //}
+//            
+//          }
+//        }
+//
+//           
+//      }
+//
+//      if (areWeDone) 
+//      {
+//        myRobotDrive.drive(0, 0);
+//        //RM SmartDashboard.putNumber("WE STOPPED AT", amountOfTicks);
+//      }
+//      
+//        
+//      return areWeDone;
+//    }
 }
